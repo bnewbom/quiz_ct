@@ -6,8 +6,10 @@
             @checkAnswer="checkAnswer">
         </QuizCard>
         <p v-if="completeQuiz">Quiz complete!</p>
-        <button>Prev</button>
-        <button>Next</button>
+        <div v-if="!completeQuiz">
+            <button>Prev</button>
+            <button @click="setNextActive" :disabled="!activeNext">Next</button>
+        </div>
     </div>
 </template>
 
@@ -18,7 +20,9 @@ export default {
     data() {
         return {
             quizArr: "",
-            completeQuiz: false
+            completeQuiz: false,
+            activeNext: false,
+            quizCount: 0
         };
     },
     mounted() {
@@ -61,24 +65,27 @@ export default {
         },
 
         //답안 체크
-        checkAnswer(quiz, answer, i){
+        checkAnswer(answer, i){
+            console.log(answer, i)
             this.quizArr = this.quizArr.map((el, index)=>{
                 if(index === i){
-                    return el.correct_answer === answer ? {...el, correct:true, solved:true, active:false} : {...el, correct:false, solved:true, active:false}       
+                    return el.correct_answer === answer ? {...el, solved:true, correct:true} : {...el, solved:true, correct:false}       
                 }
                 return el
             })    
-            this.setNextActive(i)        
+            this.activeNext = true
         },
 
         //다음 문제 활성화
-        setNextActive(i){
-            console.log(i)
-            if(i + 1 < this.quizArr.length){
-                this.quizArr.at(i+1).active = true
+        setNextActive(){
+            this.quizCount = this.quizCount + 1
+            if(this.quizCount < this.quizArr.length){
+                this.quizArr.at(this.quizCount - 1).active = false
+                this.quizArr.at(this.quizCount).active = true
             }else{
                 this.completeQuiz = true
             }
+            this.activeNext = false
         }
     }
 }

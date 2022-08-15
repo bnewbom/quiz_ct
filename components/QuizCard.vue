@@ -4,8 +4,13 @@
             <div v-if="quiz.active">
                 <h3>{{index+1}}. {{quiz.question}}</h3>
                 <ul v-for="(answer, i) in quiz.answers" :key="i">
-                    <li><a @click="checkAnswer(quiz, answer, index)">{{answer}}</a></li>
+                    <li @click="checkAnswer(answer, index)">
+                        <input type="checkbox" :id="'answer_'+i" name="scales">
+                        <label :for="'answer_'+i">{{answer}}</label>
+                    </li>
                 </ul>
+                <p v-if="quiz.solved && quiz.correct">Correct</p>
+                <p v-if="quiz.solved && !quiz.correct">Incorrect</p>
             </div>
         </div>   
     </div>
@@ -17,8 +22,8 @@ export default {
         quizList: Array
     },
     methods:{
-        checkAnswer(quiz, answer, index){
-            this.$emit('checkAnswer',quiz, answer, index)
+        checkAnswer(answer, index){
+            this.$emit('checkAnswer', answer, index)
         }
     }
 }
