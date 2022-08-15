@@ -5,7 +5,10 @@
             :quizList = quizArr
             @checkAnswer="checkAnswer">
         </QuizCard>
-        <p v-if="completeQuiz">Quiz complete!</p>
+        <p v-if="completeQuiz">
+            Quiz complete!
+            <button @click="retry">RETRY</button>
+        </p>
         <div v-if="!completeQuiz">
             <button>Prev</button>
             <button @click="setNextActive" :disabled="!activeNext">Next</button>
@@ -14,6 +17,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 import QuizCard from "../components/QuizCard.vue";
 export default {
     components: { QuizCard },
@@ -25,15 +30,26 @@ export default {
             quizCount: 0
         };
     },
+    computed:{
+        ...mapState({
+            quizListOrigin: 'quizListOrigin',
+        }),
+    },
     mounted() {
         this.getQuizList();
     },
     methods: {
+        //원본 퀴즈를 저장하기 위한 mutation
+        ...mapMutations(
+            ['setQuizListOrigin']
+        ),
+
         //API
         async getQuizList() {
             try {
                 const res = await this.$api.quiz.quizList();
                 if (res.status === 200 && res.data.results.length > 0) {
+                    this.setQuizListOrigin(res.data.results)
                     this.quizArr = this.initQuizList(res.data.results)
                 }
             }
@@ -66,7 +82,6 @@ export default {
 
         //답안 체크
         checkAnswer(answer, i){
-            console.log(answer, i)
             this.quizArr = this.quizArr.map((el, index)=>{
                 if(index === i){
                     return el.correct_answer === answer ? {...el, solved:true, correct:true} : {...el, solved:true, correct:false}       
@@ -86,6 +101,14 @@ export default {
                 this.completeQuiz = true
             }
             this.activeNext = false
+        },
+
+        //다시풀기
+        retry(){
+            this.quizArr = this.initQuizList([...this.quizListOrigin])
+            this.completeQuiz = false,
+            this.activeNext = false,
+            this.quizCount = 0
         }
     }
 }
