@@ -1,12 +1,17 @@
 <template>
     <div>
-        퀴즈 화면
+        <QuizCard 
+            v-if="quizArr !== ''"
+            :quizList = quizArr
+            @checkAnswer="checkAnswer">
+        </QuizCard>
         <button>Prev</button>
         <button>Next</button>
     </div>
 </template>
 
 <script>
+import QuizCard from "../components/QuizCard.vue";
 export default {
     data() {
         return {
@@ -22,9 +27,12 @@ export default {
             try {
                 const res = await this.$api.quiz.quizList();
                 if (res.status === 200 && res.data.results.length > 0) {
-                    this.quizArr = res.data.results.map((el) => {
+                    this.quizArr = res.data.results.map((el, index) => {
                         const answers = this.setAnswers(el.incorrect_answers, el.correct_answer);
-                        return { ...el, answers: answers, solved: false, correct: false };
+                        if(index === 0){
+                            return { ...el, active: true, answers: answers, solved: false, correct: false };
+                        }
+                            return { ...el, active: false, answers: answers, solved: false, correct: false };
                     });
                     console.log(res);
                 }
@@ -40,6 +48,10 @@ export default {
         //답안지 순서 랜덤으로 배치
         shuffle(array) {
             return array.sort(() => Math.random() - 0.5);
+        },
+        //답안 체크
+        checkAnswer(quiz, answer, index){
+            console.log(quiz, answer, index)
         }
     },
     components: { QuizCard }
