@@ -3,7 +3,7 @@
         <div v-for="(quiz, index) in quizList" :key="index">
             <div v-if="quiz.active">
                 <h3>{{index+1}}. {{quiz.question}}</h3>
-                <ul v-for="(answer, index) in quiz.answers">
+                <ul v-for="(answer, i) in quiz.answers" :key="i">
                     <li><a @click="checkAnswer(quiz, answer, index)">{{answer}}</a></li>
                 </ul>
             </div>
