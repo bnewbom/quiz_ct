@@ -1,0 +1,26 @@
+.quizcard-warp{
+    h3{
+        font-size: 20px;
+        border-bottom: 4px solid #fff;
+        padding-bottom: 15px;
+        color: #d37300;
+    }
+    ul{
+        padding-top: 15px;
+    }
+    .answer-wrap{
+        padding:35px 15px;
+    }
+    .answers{
+        padding-bottom: 10px;
+        color: #b26341;
+        font-size: 18px;
+    }
+    .correct-check{
+        padding-top: 20px;
+        border-top: 4px solid #fff;
+        font-size: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
+}

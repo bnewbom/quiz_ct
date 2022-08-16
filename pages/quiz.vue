@@ -1,17 +1,16 @@
 <template>
-    <div>
+    <div class="quiz-wrap">
         <QuizCard 
             v-if="quizArr !== ''"
             :quizList = quizArr
             @checkAnswer="checkAnswer">
         </QuizCard>
-        <p v-if="completeQuiz">
-            Quiz complete!
-            <button @click="retry">RETRY</button>
-        </p>
         <div v-if="!completeQuiz">
-            <button>Prev</button>
-            <button @click="setNextActive" :disabled="!activeNext">Next</button>
+            <button class="next-btn" @click="setNextActive" :disabled="!activeNext">Next</button>
+        </div>
+        <div v-if="completeQuiz" class="complete-btns">
+            <button class="result-btn">RESULT</button>
+            <button class="retry-btn" @click="retry">RETRY</button>
         </div>
     </div>
 </template>
@@ -81,10 +80,12 @@ export default {
         },
 
         //답안 체크
-        checkAnswer(answer, i){
+        checkAnswer(answer, i, answer_i){
             this.quizArr = this.quizArr.map((el, index)=>{
                 if(index === i){
-                    return el.correct_answer === answer ? {...el, solved:true, correct:true} : {...el, solved:true, correct:false}       
+                    return el.correct_answer === answer ? 
+                    {...el, solved:true, correct:true, sel_answer:answer} 
+                    : {...el, solved:true, correct:false, sel_answer:answer}       
                 }
                 return el
             })    

@@ -1,0 +1,7 @@
+.nuxt-wrap{
+    min-height: 100vh;
+    padding:40px;
+    background: #799F0C;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to top, #799F0C, #ACBB78);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to top, #799F0C, #ACBB78); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
