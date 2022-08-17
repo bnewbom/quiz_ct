@@ -41,4 +41,15 @@
             margin-left:5px
         }
     }
+    .report{
+        position: fixed;
+        width: 100%;
+        z-index:10;
+        bottom: -30px;
+        right: 0;
+        left: 0;
+        padding:20px;
+        margin-bottom: 30px;
+        background: #fff;
+    }
 }

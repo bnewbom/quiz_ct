@@ -5,7 +5,7 @@
                 <h3>{{index+1}}. {{quiz.question}}</h3>
                 <div class="answer-wrap">
                     <div class="answers" v-for="(answer, i) in quiz.answers" :key="i" @click="checkAnswer(answer, index, i)">
-                        <input type="checkbox" :id="'answer_'+i" name="scales">
+                        <input type="radio" :id="'answer_'+i">
                         <label :for="'answer_'+i">{{answer}}</label>
                     </div>
                 </div>

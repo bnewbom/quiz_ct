@@ -9,8 +9,13 @@
             <button class="next-btn" @click="setNextActive" :disabled="!activeNext">Next</button>
         </div>
         <div v-if="completeQuiz" class="complete-btns">
-            <button class="result-btn">RESULT</button>
+            <button class="result-btn" @click="showResult = true">RESULT</button>
             <button class="retry-btn" @click="retry">RETRY</button>
+        </div>
+        <div v-if="showResult" class="report">
+            <button @click="showResult = false">close</button>
+            <h3>Result report</h3>
+            <p>{{correctQuiz}}/{{quizCount}}</p>
         </div>
     </div>
 </template>
@@ -26,13 +31,25 @@ export default {
             quizArr: "",
             completeQuiz: false,
             activeNext: false,
-            quizCount: 0
+            quizCount: 0,
+            showResult: false
         };
     },
     computed:{
         ...mapState({
             quizListOrigin: 'quizListOrigin',
         }),
+        correctQuiz(){
+            if(this.quizArr !== ''){
+                let correctCount = 0
+                for(const el of this.quizArr){
+                    if(el.correct){
+                        correctCount++
+                    }
+                }
+                return correctCount
+            }
+        }
     },
     mounted() {
         this.getQuizList();
@@ -40,7 +57,7 @@ export default {
     methods: {
         //원본 퀴즈를 저장하기 위한 mutation
         ...mapMutations(
-            ['setQuizListOrigin']
+            ['setQuizListOrigin', 'setRetry']
         ),
 
         //API
@@ -48,7 +65,9 @@ export default {
             try {
                 const res = await this.$api.quiz.quizList();
                 if (res.status === 200 && res.data.results.length > 0) {
+                    //원본 데이터와 재응시 상태 장
                     this.setQuizListOrigin(res.data.results)
+                    this.setRetry(false)
                     this.quizArr = this.initQuizList(res.data.results)
                 }
             }
@@ -110,6 +129,7 @@ export default {
             this.completeQuiz = false,
             this.activeNext = false,
             this.quizCount = 0
+            this.setRetry(true)
         }
     }
 }
