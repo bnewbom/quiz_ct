@@ -4,9 +4,10 @@
             <div v-if="quiz.active">
                 <h3>{{index+1}}. {{quiz.question}}</h3>
                 <div class="answer-wrap">
-                    <div class="answers" v-for="(answer, i) in quiz.answers" :key="i" @click="checkAnswer(answer, index, i)">
-                        <input type="radio" :id="'answer_'+i">
-                        <label :for="'answer_'+i">{{answer}}</label>
+                    <div class="answers" v-for="(answer, i) in quiz.answers" :key="i">
+                        <button :class="{'checked':answer.checked}" 
+                            @click="checkAnswer(answer, index)"
+                            :disabled="quiz.solved">{{i+1}}.{{answer.name}}</button>
                     </div>
                 </div>
                 <div v-if="quiz.solved" class="correct-check">
@@ -24,8 +25,8 @@ export default {
         quizList: Array
     },
     methods:{
-        checkAnswer(answer, index, answer_i){
-            this.$emit('checkAnswer', answer, index, answer_i)
+        checkAnswer(answer, index){
+            this.$emit('checkAnswer', answer, index)
         }
     }
 }

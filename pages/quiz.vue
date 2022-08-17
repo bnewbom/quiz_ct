@@ -1,22 +1,34 @@
 <template>
     <div class="quiz-wrap">
+        <p v-if="quizArr === ''"> 로딩중..</p>
         <QuizCard 
-            v-if="quizArr !== ''"
+            v-if="quizArr !== '' && !showResult"
             :quizList = quizArr
             @checkAnswer="checkAnswer">
         </QuizCard>
         <div v-if="!completeQuiz">
-            <button class="next-btn" @click="setNextActive" :disabled="!activeNext">Next</button>
+            <button class="next-btn" @click="setNextActive" v-if="activeNext">Next</button>
         </div>
         <div v-if="completeQuiz" class="complete-btns">
-            <button class="result-btn" @click="showResult = true">RESULT</button>
+            <button class="result-btn" @click="setComplete">RESULT</button>
             <button class="retry-btn" @click="retry">RETRY</button>
         </div>
         <div v-if="showResult" class="report">
-            <button @click="showResult = false">close</button>
             <h3>Result report</h3>
             <p>{{correctQuiz}}/{{quizCount}}</p>
-            <PieChart></PieChart>
+            <PieChart 
+                :chartData="chartData"
+                :width="200"
+                :height="200"></PieChart>
+            <div>
+                <h3>Note</h3>
+                <div v-for="(quiz, index) in wrongNote" :key="index">
+                    <p>{{quiz.question}}</p>
+                    <p>My select: {{quiz.sel_answer}}</p>
+                    <p>Correct Answer: {{quiz.correct_answer}}</p>
+                    <br/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -30,11 +42,21 @@ export default {
     components: { QuizCard, PieChart },
     data() {
         return {
-            quizArr: "",
+            quizArr: '',
+            wrongNote: '',
             completeQuiz: false,
             activeNext: false,
             quizCount: 0,
-            showResult: false
+            showResult: false,
+            chartData: {
+                labels: [ 'Correct', 'Incorrect'],
+                datasets: [
+                {
+                    backgroundColor: '#f87979',
+                    data: [10, 20]
+                }
+                ]
+            }
         };
     },
     computed:{
@@ -92,7 +114,11 @@ export default {
 
         //답안지 배열 생성
         setAnswers(arr, item) {
-            return this.shuffle([...arr, item]);
+            arr=[...arr, item]
+            arr=arr.map(el=>{
+                return {name:el, checked:false}
+            })
+            return this.shuffle(arr);
         },
 
         //답안지 순서 랜덤으로 배치
@@ -101,7 +127,7 @@ export default {
         },
 
         //답안 체크
-        checkAnswer(answer, i, answer_i){
+        checkAnswer(answer, i){
             this.quizArr = this.quizArr.map((el, index)=>{
                 if(index === i){
                     return el.correct_answer === answer ? 
@@ -109,7 +135,8 @@ export default {
                     : {...el, solved:true, correct:false, sel_answer:answer}       
                 }
                 return el
-            })    
+            })
+            answer.checked = true
             this.activeNext = true
         },
 
@@ -128,10 +155,26 @@ export default {
         //다시풀기
         retry(){
             this.quizArr = this.initQuizList([...this.quizListOrigin])
-            this.completeQuiz = false,
-            this.activeNext = false,
+            this.completeQuiz = false
+            this.activeNext = false
+            this.showResult = false
             this.quizCount = 0
             this.setRetry(true)
+        },
+
+        //퀴즈 완료
+        setComplete(){
+            this.setWrongNote()
+            this.showResult = true
+        },
+
+        //오답노트 생성
+        setWrongNote(){
+            this.wrongNote = this.quizArr.filter(el=>{
+                if(!el.correct){
+                    return el
+                }
+            })
         }
     }
 }

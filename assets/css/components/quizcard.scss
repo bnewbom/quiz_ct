@@ -15,6 +15,22 @@
         padding-bottom: 10px;
         color: #b26341;
         font-size: 18px;
+
+        button{
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 5px;
+            background: #b26341;
+            color:#fff;
+            border-radius: 8px;
+            text-indent: 10px;
+        };
+
+        .checked{
+            font-weight:600;
+            color:#000
+        }
     }
     .correct-check{
         padding-top: 20px;

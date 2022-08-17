@@ -1,5 +1,5 @@
 <template>
-  <Pie :chart-data="chartData" />
+  <Pie class="pie-chart" :chart-data="chartData" :width="width" :height="height"/>
 </template>
 
 <script>
@@ -9,19 +9,19 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } f
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
 export default {
   components: { Pie },
-  data() {
-    return {
-      chartData: {
-        labels: [ 'January', 'February', 'March'],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [40, 20, 12]
-          }
-        ]
-      }
-    }
+  props: {
+    chartData: {
+        type: Object,
+        required: true
+      },
+    width: {
+      type: Number,
+      default: 300
+    },
+    height: {
+      type: Number,
+      default: 300
+    },
   }
 }
 </script>
