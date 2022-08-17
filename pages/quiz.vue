@@ -7,7 +7,7 @@
             @checkAnswer="checkAnswer">
         </QuizCard>
         <div v-if="!completeQuiz">
-            <button class="next-btn" @click="setNextActive" v-if="activeNext">Next</button>
+            <button class="next-btn" @click="setNextActive" v-if="activeNext"> >> </button>
         </div>
         <div v-if="completeQuiz" class="complete-btns">
             <button class="result-btn" @click="setComplete">RESULT</button>
@@ -15,7 +15,7 @@
         </div>
         <div v-if="showResult" class="report">
             <h3>Result report</h3>
-            <p>{{correctQuiz}}/{{quizCount}}</p>
+            <p class="score">score: {{correctQuiz}}/{{quizCount}}</p>
             <PieChart 
                 :chartData="chartData"
                 :width="200"
@@ -23,9 +23,9 @@
             <div>
                 <h3>Note</h3>
                 <div v-for="(quiz, index) in wrongNote" :key="index">
-                    <p>{{quiz.question}}</p>
-                    <p>My select: {{quiz.sel_answer}}</p>
-                    <p>Correct Answer: {{quiz.correct_answer}}</p>
+                    <p class="quiz">Q. <em v-html="quiz.question"></em></p>
+                    <p class="wrong">My: {{quiz.sel_answer.name}}</p>
+                    <p class="correct">Correct: {{quiz.correct_answer}}</p>
                     <br/>
                 </div>
             </div>
@@ -50,12 +50,7 @@ export default {
             showResult: false,
             chartData: {
                 labels: [ 'Correct', 'Incorrect'],
-                datasets: [
-                {
-                    backgroundColor: '#f87979',
-                    data: [10, 20]
-                }
-                ]
+                datasets: ''
             }
         };
     },
@@ -165,7 +160,19 @@ export default {
         //퀴즈 완료
         setComplete(){
             this.setWrongNote()
+            this.setChartData()
             this.showResult = true
+        },
+
+        //차트 데이터 생성
+        setChartData(){
+            const dataset = [
+                {
+                    backgroundColor: '#f87979',
+                    data: [this.correctQuiz, this.quizCount - this.correctQuiz]
+                }
+            ]
+            this.chartData.datasets = dataset
         },
 
         //오답노트 생성
