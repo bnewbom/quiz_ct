@@ -1,6 +1,9 @@
 <template>
     <div class="quiz-wrap">
-        <p v-if="quizArr === ''"> 로딩중..</p>
+        <!--로딩-->
+        <Loading v-if="quizArr === ''"></Loading>
+
+        <!--퀴즈-->
         <QuizCard 
             v-if="quizArr !== '' && !showResult"
             :quizList = quizArr
@@ -9,10 +12,14 @@
         <div v-if="!completeQuiz">
             <button class="next-btn" @click="setNextActive" v-if="activeNext"> >> </button>
         </div>
+
+        <!--결과보기/다시풀기-->
         <div v-if="completeQuiz" class="complete-btns">
             <button class="result-btn" @click="setComplete">RESULT</button>
             <button class="retry-btn" @click="retry">RETRY</button>
         </div>
+
+        <!--리포트-->
         <div v-if="showResult" class="report">
             <h3>Result report</h3>
             <p class="score">score: {{correctQuiz}}/{{quizCount}}</p>
@@ -36,10 +43,11 @@
 <script>
 import { mapState } from 'vuex'
 import { mapMutations } from 'vuex'
+import Loading from "../components/Loading.vue";
 import QuizCard from "../components/QuizCard.vue";
 import PieChart from "../components/PieChart.vue";
 export default {
-    components: { QuizCard, PieChart },
+    components: { QuizCard, PieChart, Loading },
     data() {
         return {
             quizArr: '',
