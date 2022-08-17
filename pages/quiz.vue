@@ -16,6 +16,7 @@
             <button @click="showResult = false">close</button>
             <h3>Result report</h3>
             <p>{{correctQuiz}}/{{quizCount}}</p>
+            <PieChart></PieChart>
         </div>
     </div>
 </template>
@@ -24,8 +25,9 @@
 import { mapState } from 'vuex'
 import { mapMutations } from 'vuex'
 import QuizCard from "../components/QuizCard.vue";
+import PieChart from "../components/PieChart.vue";
 export default {
-    components: { QuizCard },
+    components: { QuizCard, PieChart },
     data() {
         return {
             quizArr: "",
