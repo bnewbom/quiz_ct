@@ -2,12 +2,13 @@
     <div class="quizcard-warp">
         <div v-for="(quiz, index) in quizList" :key="index">
             <div v-if="quiz.active">
-                <h3>{{index+1}}. {{quiz.question}}</h3>
+                <h4>Quiz. {{index+1}} </h4>
+                <h3 v-html="quiz.question"></h3>
                 <div class="answer-wrap">
                     <div class="answers" v-for="(answer, i) in quiz.answers" :key="i">
                         <button :class="{'checked':answer.checked}" 
                             @click="checkAnswer(answer, index)"
-                            :disabled="quiz.solved">{{i+1}}.{{answer.name}}</button>
+                            :disabled="quiz.solved">{{i+1}}. {{answer.name}}</button>
                     </div>
                 </div>
                 <div v-if="quiz.solved" class="correct-check">
