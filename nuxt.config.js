@@ -4,12 +4,6 @@ export default {
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
-  
-  // Build path change
-  target: 'static',
-  router: {
-    base: '/quiz_ct/'
-  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
