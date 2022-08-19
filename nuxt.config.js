@@ -4,6 +4,15 @@ export default {
 
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
+  
+  // Build path change
+  generate: {
+    dir: 'docs'
+  },
+  target: 'static',
+  router: {
+    base: '/nuxt_vue_ts/'
+  },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
