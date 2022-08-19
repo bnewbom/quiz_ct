@@ -6,12 +6,9 @@ export default {
   target: 'static',
   
   // Build path change
-  generate: {
-    dir: 'docs'
-  },
   target: 'static',
   router: {
-    base: '/nuxt_vue_ts/'
+    base: '/quiz_ct/'
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
