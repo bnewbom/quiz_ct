@@ -8,7 +8,9 @@
                     <div class="answers" v-for="(answer, i) in quiz.answers" :key="i">
                         <button :class="{'checked':answer.checked}" 
                             @click="checkAnswer(answer, index)"
-                            :disabled="quiz.solved">{{i+1}}. {{answer.name}}</button>
+                            :disabled="quiz.solved">
+                            {{i+1}}. <em v-html="answer.name"></em>
+                        </button>
                     </div>
                 </div>
                 <div v-if="quiz.solved" class="correct-check">

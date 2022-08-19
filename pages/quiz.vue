@@ -3,6 +3,9 @@
         <!--로딩-->
         <Loading v-if="quizArr === ''"></Loading>
 
+        <!--타이머-->
+        <p class="timer">Timer : {{timerStr}}</p>
+
         <!--퀴즈-->
         <QuizCard 
             v-if="quizArr !== '' && !showResult"
@@ -56,6 +59,8 @@ export default {
             activeNext: false,
             quizCount: 0,
             showResult: false,
+            timer: null,
+            timeCounter: 0,
             chartData: {
                 labels: [ 'Correct', 'Incorrect'],
                 datasets: ''
@@ -76,10 +81,22 @@ export default {
                 }
                 return correctCount
             }
+            return 0
+        },
+        timerStr(){
+            let time = this.timeCounter / 60;
+            let minutes = parseInt(time);
+            let secondes = Math.round((time - minutes) * 60);
+            return (
+                minutes.toString().padStart(2, "0") +
+                ":" +
+                secondes.toString().padStart(2, "0")
+            );
         }
     },
     mounted() {
         this.getQuizList();
+        this.timer = this.timerStart();
     },
     methods: {
         //원본 퀴즈를 저장하기 위한 mutation
@@ -151,6 +168,7 @@ export default {
                 this.quizArr.at(this.quizCount).active = true
             }else{
                 this.completeQuiz = true
+                this.timerStop()
             }
             this.activeNext = false
         },
@@ -163,6 +181,7 @@ export default {
             this.showResult = false
             this.quizCount = 0
             this.setRetry(true)
+            this.timer = this.timerStart()
         },
 
         //퀴즈 완료
@@ -190,7 +209,25 @@ export default {
                     return el
                 }
             })
-        }
+        },
+        
+        //타이머 시작
+        timerStart() {
+        this.timeCounter = 0
+        let interval = setInterval(() => {
+            this.timeCounter++
+        }, 1000);
+            return interval;
+        },
+
+        //타이머 종료
+        timerStop() {
+            clearInterval(this.timer);
+            this.timer = null
+        },
+    },
+       destroyed(){
+        this.timerStop()
     }
 }
 </script>
